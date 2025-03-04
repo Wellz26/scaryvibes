@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Web Nightmare</title>
+    <style>
+        body {
+            background: black;
+            color: white;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            overflow: hidden;
+            cursor: none;
+            user-select: none;
+        }
+        .hidden {
+            display: none;
+        }
+        .glitch {
+            font-size: 3rem;
+            animation: glitch 0.3s infinite;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 5px 5px red; }
+            25% { text-shadow: -5px -5px blue; }
+            50% { text-shadow: 5px -5px green; }
+            75% { text-shadow: -5px 5px white; }
+            100% { text-shadow: 5px 5px black; }
+        }
+        .url-hijack {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: black;
+            color: red;
+            font-size: 1rem;
+            text-align: left;
+            padding-left: 10px;
+            line-height: 30px;
+            font-family: 'Courier New', monospace;
+        }
+        #webcam {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 200px;
+            height: 150px;
+            border: 2px solid red;
+            background: black;
+        }
+        #downloadBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: red;
+            color: white;
+            padding: 10px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="url-hijack" id="fakeURL">https://darkweb_network/hacked_system</div>
+    <h1 class="glitch">Welcome...</h1>
+    <p id="message">Stay a while...</p>
+    
+    <div class="bluescreen hidden" id="bsod">
+        SYSTEM ERROR: CRITICAL PROCESS DIED<br>Data corruption detected...<br>
+        <span id="countdown"></span>
+    </div>
+    
+    <div class="virus-text hidden" id="virusMsg">System Breach Detected. Uploading Files to Dark Web...</div>
+    
+    <video id="webcam" autoplay playsinline class="hidden"></video>
+    <button id="downloadBtn" class="hidden">Download Video</button>
+    
+    <script>
+        let mediaRecorder;
+        let recordedChunks = [];
+
+        setTimeout(() => {
+            let fakeURL = document.getElementById("fakeURL");
+            let urlText = "https://darkweb_network/hacked_system";
+            let index = 0;
+            setInterval(() => {
+                if (index < urlText.length) {
+                    fakeURL.innerText += urlText[index];
+                    index++;
+                } else {
+                    fakeURL.innerText = "";
+                    index = 0;
+                }
+            }, 100);
+        }, 5000);
+        
+        setTimeout(() => {
+            document.getElementById("message").innerText = "You shouldn't be here...";
+        }, 5000);
+        
+        setTimeout(() => {
+            document.body.requestFullscreen().catch(err => {});
+            alert("Your system has been compromised. Data extraction in progress...");
+        }, 12000);
+        
+        setTimeout(() => {
+            document.getElementById("bsod").classList.remove("hidden");
+            document.getElementById("bsod").style.opacity = "1";
+            let countdown = document.getElementById("countdown");
+            let num = 3;
+            let interval = setInterval(() => {
+                countdown.innerText = num;
+                num--;
+                if (num < 0) {
+                    clearInterval(interval);
+                    document.getElementById("bsod").style.opacity = "0";
+                    document.getElementById("virusMsg").classList.remove("hidden");
+                    document.getElementById("virusMsg").style.opacity = "1";
+                }
+            }, 1000);
+        }, 15000);
+        
+        navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            let video = document.getElementById('webcam');
+            video.srcObject = stream;
+            video.classList.remove("hidden");
+
+            // Enable recording
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = event => recordedChunks.push(event.data);
+            mediaRecorder.onstop = () => {
+                let blob = new Blob(recordedChunks, { type: "video/webm" });
+                let url = URL.createObjectURL(blob);
+                let a = document.createElement("a");
+                a.href = url;
+                a.download = "recorded_webcam_feed.webm";
+                document.body.appendChild(a);
+                document.getElementById("downloadBtn").classList.remove("hidden");
+                document.getElementById("downloadBtn").onclick = () => a.click();
+            };
+            mediaRecorder.start();
+            setTimeout(() => {
+                mediaRecorder.stop();
+            }, 15000);
+        })
+        .catch(err => {
+            console.error("Camera access denied", err);
+        });
+    </script>
+</body>
+</html>
+</html>
+
+
+
